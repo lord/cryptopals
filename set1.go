@@ -28,6 +28,14 @@ func xor(one, two []byte) []byte {
 	return answer
 }
 
+func xorByte(one []byte, two byte) []byte {
+	answer := []byte{}
+	for i, _ := range one {
+		answer = append(answer, one[i]^two)
+	}
+	return answer
+}
+
 // low numbers are better
 func scoreEnglishText(input string) float64 {
 	input = strings.ToLower(input)
@@ -45,6 +53,24 @@ func scoreEnglishText(input string) float64 {
 		difference += math.Abs(freq - inputFrequency[char])
 	}
 	return difference
+}
+
+func findSingleCharacterXorPlaintext(input []byte) (string, byte) {
+	bestMatch := []byte{}
+	bestMatchScore := float64(1000)
+	bestMatchKey := byte(0)
+
+	for num := 0; num <= 255; num += 1 {
+		key := byte(num)
+		text := xorByte(input, key)
+		score := scoreEnglishText(string(text))
+		if score < bestMatchScore {
+			bestMatchScore = score
+			bestMatch = text
+			bestMatchKey = key
+		}
+	}
+	return string(bestMatch), bestMatchKey
 }
 
 func main() {
