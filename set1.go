@@ -17,7 +17,13 @@ func hexToBase64(hexString string) string {
 }
 
 func xor(one, two []byte) []byte {
-	return []byte{}
+	answer := []byte{}
+	for i, _ := range one {
+		if i < len(two) {
+			answer = append(answer, one[i]^two[i])
+		}
+	}
+	return answer
 }
 
 func main() {
