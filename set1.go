@@ -4,6 +4,8 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
+	"math"
+	"strings"
 )
 
 var b64 = base64.StdEncoding
@@ -24,6 +26,25 @@ func xor(one, two []byte) []byte {
 		}
 	}
 	return answer
+}
+
+// low numbers are better
+func scoreEnglishText(input string) float64 {
+	input = strings.ToLower(input)
+	inputFrequency := map[rune]float64{}
+	for _, c := range input {
+		if val, ok := inputFrequency[c]; ok {
+			inputFrequency[c] = val + float64(1)/float64(len(input))
+		} else {
+			inputFrequency[c] = float64(1) / float64(len(input))
+		}
+	}
+
+	difference := float64(0)
+	for char, freq := range letterFrequency {
+		difference += math.Abs(freq - inputFrequency[char])
+	}
+	return difference
 }
 
 func main() {
